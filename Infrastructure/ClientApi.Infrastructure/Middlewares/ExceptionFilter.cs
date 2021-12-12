@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ClientApi.Core.Dtos;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
 
@@ -8,9 +9,12 @@ namespace ClientApi.Infrastructure.Middlewares
     {
         public void OnException(ExceptionContext context)
         {
-            context.Result = new JsonResult(new
+            context.Result = new BadRequestObjectResult(new Response<string>() 
             {
-                Error = context.Exception.Message
+                ErrorMessage = context.Exception.Message,
+                StatusCode = 400,
+                AnErrorOcurred = true,
+                Data = null
             });
 
             context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
