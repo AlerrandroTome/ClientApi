@@ -15,7 +15,7 @@ namespace ClientApi.Controllers
     [ApiExplorerSettings]
     [Route("api/[controller]")]
     [ODataRoutePrefix("City")]
-    public class ManageCityController : ControllerBase
+    public class ManageCityController : ODataController
     {
         private readonly IManageCityService _service;
 
@@ -44,7 +44,8 @@ namespace ClientApi.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {
-            return Ok(await _service.DeleteAsync(id));
+            var response = await _service.DeleteAsync(id);
+            return StatusCode(response.StatusCode, response);
         }
 
         /// <summary>
@@ -63,7 +64,8 @@ namespace ClientApi.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(UpdateCityDto dto)
         {
-            return Ok(await _service.UpdateAsync(dto));
+            var response = await _service.UpdateAsync(dto);
+            return StatusCode(response.StatusCode, response);
         }
     }
 }

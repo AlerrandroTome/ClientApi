@@ -2,6 +2,8 @@
 using ClientApi.Core.Dtos.Cities;
 using ClientApi.Core.Dtos.Clients;
 using ClientApi.Core.Entities;
+using ClientApi.Core.Enums;
+using System;
 
 namespace ClientApi.Infrastructure.AutoMapper
 {
@@ -9,25 +11,45 @@ namespace ClientApi.Infrastructure.AutoMapper
     {
         public AutoMapper()
         {
-            _ = CreateMap<City, CreateCityDto>().BeforeMap((entity, CreateCityDto) =>
+            // Cities
+            _ = CreateMap<City, CreateCityDto>().BeforeMap((entity, dto) =>
             {
-                entity.State = CreateCityDto.State.ToUpperInvariant();
+                dto.State = entity.State.ToUpperInvariant();
             });
-            _ = CreateMap<CreateCityDto, City>().BeforeMap((entity, CreateCityDto) =>
+            _ = CreateMap<CreateCityDto, City>().BeforeMap((dto, entity) =>
             {
-                entity.State = CreateCityDto.State.ToUpperInvariant();
+                entity.State = dto.State.ToUpperInvariant();
             });
-            _ = CreateMap<UpdateCityDto, City>().BeforeMap((entity, CreateCityDto) =>
+            _ = CreateMap<UpdateCityDto, City>().BeforeMap((dto, entity) =>
             {
-                entity.State = CreateCityDto.State.ToUpperInvariant();
+                entity.State = dto.State.ToUpperInvariant();
             });
-            _ = CreateMap<City, UpdateCityDto>().BeforeMap((entity, CreateCityDto) =>
+            _ = CreateMap<City, UpdateCityDto>().BeforeMap((entity, dto) =>
             {
-                entity.State = CreateCityDto.State.ToUpperInvariant();
+                dto.State = entity.State.ToUpperInvariant();
             });
 
-            _ = CreateMap<City, CreateClientDto>().ReverseMap();
-            _ = CreateMap<Client, UpdateClientDto>().ReverseMap();
+            // Clients
+            _ = CreateMap<Client, CreateClientDto>().BeforeMap((entity, dto) =>
+            {
+                dto.Gender = (EGender)Enum.Parse(typeof(EGender), entity.Gender);
+            });
+            _ = CreateMap<CreateClientDto, Client>().BeforeMap((dto, entity) =>
+            {
+                entity.Gender = dto.Gender.ToString();
+                var time = DateTime.Now.Date - dto.BirthDate.Date;
+                entity.Age = new DateTime(time.Ticks).Year - 1;
+            });
+            _ = CreateMap<UpdateClientDto, Client>().BeforeMap((dto, entity) =>
+            {
+                entity.Gender = dto.Gender.ToString();
+                var time = DateTime.Now.Date - dto.BirthDate.Date;
+                entity.Age = new DateTime(time.Ticks).Year - 1;
+            });
+            _ = CreateMap<Client, UpdateClientDto>().BeforeMap((entity, dto) =>
+            {
+                dto.Gender = (EGender)Enum.Parse(typeof(EGender), entity.Gender);
+            });
         }
     }
 }

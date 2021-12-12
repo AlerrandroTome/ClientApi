@@ -2,7 +2,8 @@
 {
     public enum EGender
     {
-        Male = 'M',
-        Female = 'F'
+        Male = 0,
+        Female = 1,
+        NotByinary = 2
     }
 }

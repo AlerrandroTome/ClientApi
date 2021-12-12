@@ -16,7 +16,6 @@ namespace ClientApi.Configurations
     {
         public static void AddOdataSetup(this IServiceCollection services)
         {
-            services.AddRouting();
             services.AddOData();
 
             services.AddMvcCore(options =>

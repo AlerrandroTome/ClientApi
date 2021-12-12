@@ -15,7 +15,7 @@ namespace ClientApi.Controllers
     [ApiExplorerSettings]
     [Route("api/[controller]")]
     [ODataRoutePrefix("Client")]
-    public class ManageClientController : ControllerBase
+    public class ManageClientController : ODataController
     {
         private readonly IManageClientService _service;
 
@@ -32,8 +32,8 @@ namespace ClientApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateClientDto dto)
         {
-            await _service.CreateAsync(dto);
-            return Ok();
+            var response = await _service.CreateAsync(dto);
+            return StatusCode(response.StatusCode, response);
         }
 
         /// <summary>
@@ -44,8 +44,8 @@ namespace ClientApi.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await _service.DeleteAsync(id);
-            return Ok();
+            var response = await _service.DeleteAsync(id);
+            return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet]
@@ -61,8 +61,8 @@ namespace ClientApi.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(UpdateClientDto dto)
         {
-            await _service.UpdateAsync(dto);
-            return Ok();
+            var response = await _service.UpdateAsync(dto);
+            return StatusCode(response.StatusCode, response);
         }
     }
 }

@@ -8,6 +8,8 @@ namespace ClientApi.Infrastructure.Mappings
     {
         public void Configure(EntityTypeBuilder<Client> builder)
         {
+            _ = builder.ToTable("Client");
+
             builder.AddBaseMapping();
 
             _ = builder.Property(p => p.Name).IsRequired();
