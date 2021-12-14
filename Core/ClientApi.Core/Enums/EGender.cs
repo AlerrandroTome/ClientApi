@@ -4,6 +4,6 @@
     {
         Male = 0,
         Female = 1,
-        NotByinary = 2
+        Others = 2
     }
 }

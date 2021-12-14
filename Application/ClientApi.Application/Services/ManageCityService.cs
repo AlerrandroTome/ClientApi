@@ -37,8 +37,9 @@ namespace ClientApi.Application.Services
         public async Task<Response<Guid>> DeleteAsync(Guid id)
         {
             var city = await unitOfWork.Repository<City>(context).GetAsync(city => city.Id == id, new[] { "Clients" });
+            _ = city ?? throw new ApplicationException("City not found.");
 
-            if(city.Clients.Any())
+            if (city.Clients.Any())
             {
                 throw new ApplicationException($"The {city.Name} has registered clients. Please update the profile " +
                     $"of these client before trying to remove this city again.");
@@ -58,7 +59,10 @@ namespace ClientApi.Application.Services
         {
             _ = dto ?? throw new ArgumentNullException(nameof(dto));
 
-            var city = mapper.Map<City>(dto);
+            var cityEntity = await unitOfWork.Repository<City>(context).GetAsync(city => city.Id == dto.Id);
+            _ = cityEntity ?? throw new ApplicationException("City not found.");
+
+            var city = mapper.Map(dto, cityEntity);
             var response = new Response<City>();
             response.Data = await unitOfWork.Repository<City>(context).UpdateAsync(city);
             return response;

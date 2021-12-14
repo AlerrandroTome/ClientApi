@@ -37,6 +37,7 @@ namespace ClientApi.Application.Services
         public async Task<Response<Guid>> DeleteAsync(Guid id)
         {
             var client = await unitOfWork.Repository<Client>(context).GetAsync(client => client.Id == id);
+            _ = client ?? throw new ApplicationException("Client not found.");
             var response = new Response<Guid>();
             response.Data = await unitOfWork.Repository<Client>(context).DeleteAsync(client);
             return response;
@@ -51,7 +52,10 @@ namespace ClientApi.Application.Services
         {
             _ = dto ?? throw new ArgumentNullException(nameof(dto));
 
-            var client = mapper.Map<Client>(dto);
+            var clientEntity = await unitOfWork.Repository<Client>(context).GetAsync(client => client.Id == dto.Id);
+            _ = clientEntity ?? throw new ApplicationException("Client not found.");
+
+            var client = mapper.Map(dto, clientEntity);
             var response = new Response<Client>();
             response.Data = await unitOfWork.Repository<Client>(context).UpdateAsync(client);
             return response;
