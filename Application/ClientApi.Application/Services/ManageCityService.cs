@@ -41,7 +41,7 @@ namespace ClientApi.Application.Services
 
             if (city.Clients.Any())
             {
-                throw new ApplicationException($"The {city.Name} has registered clients. Please update the profile " +
+                throw new ApplicationException($"{city.Name} has registered clients. Please update the profile " +
                     $"of these client before trying to remove this city again.");
             }
 
